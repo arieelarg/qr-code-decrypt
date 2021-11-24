@@ -1,6 +1,6 @@
-### Cómo se corre?
+# Cómo se corre?
 
-# Pre-requisitos
+### Pre-requisitos
 
 Tener instalado: `Imagemagick` y `Graphicsmagick`
 
