@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const PORT = 3200;
+const host = "0.0.0.0";
 
 const { fromPath } = require("pdf2pic");
 const fs = require("fs");
@@ -81,6 +82,4 @@ app.get("/", async (req, res, next) => {
   }
 });
 
-app.listen(PORT, function () {
-  console.log(`App listening on port ${PORT}!`);
-});
+app.listen(PORT, host, () => console.log(`Listening on port: ${PORT}`));
