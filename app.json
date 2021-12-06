@@ -3,7 +3,6 @@
     {
       "url": "https://github.com/heroku/heroku-buildpack-apt"
     },
-    { "url": "https://github.com/DuckyTeam/heroku-buildpack-imagemagick" },
     {
       "url": "heroku/nodejs"
     }
