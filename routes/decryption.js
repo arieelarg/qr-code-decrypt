@@ -74,7 +74,7 @@ router.get("/", async (req, res, next) => {
     res.send({ qrResult });
     next;
   } catch (err) {
-    console.log("ERROR: ");
+    console.log("ERROR: ", err);
   }
 });
 
