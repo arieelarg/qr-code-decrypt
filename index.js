@@ -49,25 +49,27 @@ app.get("/", async (req, res, next) => {
     }
 
     try {
-      Quagga.decodeSingle({
-        src: `${options.savePath}/barcodeExample.png`,
-        numOfWorkers: 0,
-        decoder: {
-          readers: ["code_128_reader", "ean_reader"],
+      Quagga.decodeSingle(
+        {
+          src: `${options.savePath}/barcodeExample.png`,
+          numOfWorkers: 0,
+          decoder: {
+            readers: ["code_128_reader", "ean_reader"],
+          },
         },
-      }, function(result) {
-        const barcodeResult = result.codeResult;
-        if (barcodeResult) {
-          console.log("BARCODE DETECTED!: ", barcodeResult.code);
-        } else {
-          console.log("BARCODE NOT DETECTED");
+        function (result) {
+          const barcodeResult = result.codeResult;
+          if (barcodeResult) {
+            console.log("BARCODE DETECTED!: ", barcodeResult.code);
+          } else {
+            console.log("BARCODE NOT DETECTED");
+          }
         }
-    });
+      );
 
-    console.log("TERMINO y MANDA")
+      console.log("TERMINO y MANDA");
 
-    res.send(qrResult)
-
+      res.send(qrResult);
     } catch (error) {
       console.log("BARCODE ERROR");
     }
