@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { fromPath, fromBuffer } = require('pdf2pic');
+const { fromPath } = require('pdf2pic');
 const PNG = require('pngjs').PNG;
 
 const savePath = './public/uploads';
@@ -22,36 +22,40 @@ function save(file) {
   });
 }
 
-const convertPDFtoPNG = (filename, extension) => {
+const convertPDFtoPNG = async (originalName) => {
+  const onlyFilename = originalName.split('.')[0];
+
   const options = {
     density: 100,
-    saveFilename: filename,
+    saveFilename: onlyFilename,
     format: 'png',
-    width: 2000,
-    height: 2000,
+    width: 2480,
+    height: 3508,
     savePath
   };
 
-  const pathToPDF = `${savePath}/${filename}.${extension}`;
+  const pathToPDF = `${savePath}/${originalName}`;
 
-  const buffer = fs.readFileSync(pathToPDF);
+  const convert = fromPath(pathToPDF, options);
 
-  const convert = fromBuffer(buffer, options);
-
-  console.log('Comienza a guardar imagen');
-  return convert(1); // Solo la primera: page = 1
+  await convert(1); // Solo la primera: page = 1
 };
 
 const generatePNGBuffer = (fileName) => {
   try {
-    console.log('Genera PNG buffer');
     const fileToPNG = `${savePath}/${fileName}.1.png`;
     const imgData = PNG.sync.read(fs.readFileSync(fileToPNG));
     return imgData;
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     console.log('Error generando PNG');
   }
 };
 
-module.exports = { save, convertPDFtoPNG, generatePNGBuffer };
+const formatCodedAmount = (codedAmount) => {
+  const partialAmount = decodeURIComponent(codedAmount).split('Efectivo')[1];
+  const formattedAmount = partialAmount.replace(/,/g, '').split('$ ')[1];
+  return formattedAmount;
+};
+
+module.exports = { save, convertPDFtoPNG, generatePNGBuffer, formatCodedAmount };
