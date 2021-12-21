@@ -50,6 +50,33 @@ const invoicePDFToData = async (req, res) => {
   }
 };
 
+const qrcodePDFToData = async (req, res) => {
+  try {
+    const { originalname, filename: tmpFilename } = req.file;
+    const [onlyFilename] = originalname.split('.');
+    const filenameTmp = `${savePath}/${tmpFilename}`;
+    const pathToPDF = `${savePath}/${originalname}`;
+
+    await fs.createReadStream(filenameTmp).pipe(fs.createWriteStream(pathToPDF));
+
+    fs.unlink(filenameTmp, async (e) => {
+      if (e) return;
+
+      await convertPDFtoPNG(originalname);
+
+      const imgData = generatePNGBuffer(onlyFilename);
+
+      const qrResult = !!imgData ? zbarScan(imgData) : 'Error';
+
+      return res.json({ qrData: qrResult[0].data });
+    });
+  } catch (e) {
+    return res.err({ message: 'Ocurrió un error' });
+  }
+};
+
 router.post('/decrypt/invoice', upload.single('invoice'), invoicePDFToData);
+
+router.post('/decrypt/qrcode', upload.single('qrcode'), qrcodePDFToData);
 
 module.exports = router;
