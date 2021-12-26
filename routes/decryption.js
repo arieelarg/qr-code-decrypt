@@ -46,7 +46,7 @@ const invoicePDFToData = async (req, res) => {
       return;
     });
   } catch (e) {
-    return res.err({ message: 'Ocurrió un error' });
+    return res.sendStatus(500);
   }
 };
 
@@ -71,12 +71,16 @@ const qrcodePDFToData = async (req, res) => {
       return res.json({ qrData: qrResult[0].data });
     });
   } catch (e) {
-    return res.err({ message: 'Ocurrió un error' });
+    return res.sendStatus(500);
   }
 };
 
 router.post('/decrypt/invoice', upload.single('invoice'), invoicePDFToData);
 
 router.post('/decrypt/qrcode', upload.single('qrcode'), qrcodePDFToData);
+
+router.get('/ping', (req, res) => {
+  res.sendStatus(200);
+});
 
 module.exports = router;
