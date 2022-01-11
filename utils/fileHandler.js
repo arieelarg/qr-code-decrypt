@@ -1,4 +1,6 @@
 const fs = require('fs');
+const path = require('path');
+
 const { fromPath } = require('pdf2pic');
 const PNG = require('pngjs').PNG;
 
@@ -26,11 +28,11 @@ const convertPDFtoPNG = async (originalName) => {
   const onlyFilename = originalName.split('.')[0];
 
   const options = {
-    density: 100,
+    density: 1000,
     saveFilename: onlyFilename,
     format: 'png',
-    width: 2480,
-    height: 3508,
+    width: 1280,
+    height: 1810,
     savePath
   };
 
@@ -58,4 +60,16 @@ const formatCodedAmount = (codedAmount) => {
   return formattedAmount;
 };
 
-module.exports = { save, convertPDFtoPNG, generatePNGBuffer, formatCodedAmount };
+const deleteAllFiles = () => {
+  fs.readdir(savePath, (err, files) => {
+    if (err) throw err;
+
+    for (const file of files) {
+      fs.unlink(path.join(savePath, file), (err) => {
+        if (err) throw err;
+      });
+    }
+  });
+};
+
+module.exports = { save, convertPDFtoPNG, generatePNGBuffer, formatCodedAmount, deleteAllFiles };
