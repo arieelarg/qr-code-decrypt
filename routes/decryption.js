@@ -53,7 +53,7 @@ const invoicePDFToData = async (req, res) => {
     });
   } catch (e) {
     deleteAllFiles();
-    return res.send(204);
+    return res.sendStatus(204);
   }
 };
 
@@ -80,7 +80,7 @@ const qrcodePDFToData = async (req, res) => {
     });
   } catch (e) {
     deleteAllFiles();
-    return res.send(204);
+    return res.sendStatus(204);
   }
 };
 
@@ -126,7 +126,7 @@ const barcodePDFToData = async (req, res) => {
               } else {
                 // console.log('BARCODE NOT DETECTED');
                 deleteAllFiles();
-                return res.send(204);
+                return res.sendStatus(204);
               }
             }
           );
@@ -135,7 +135,7 @@ const barcodePDFToData = async (req, res) => {
     });
   } catch (e) {
     deleteAllFiles();
-    return res.send(204);
+    return res.sendStatus(204);
   }
 };
 
