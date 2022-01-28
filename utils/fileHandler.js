@@ -24,11 +24,11 @@ function save(file) {
   });
 }
 
-const convertPDFtoPNG = async (originalName) => {
+const convertPDFtoPNG = async (originalName, density = 100) => {
   const onlyFilename = originalName.split('.')[0];
 
   const options = {
-    density: 1000,
+    density,
     saveFilename: onlyFilename,
     format: 'png',
     width: 1280,

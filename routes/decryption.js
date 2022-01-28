@@ -42,17 +42,17 @@ const invoicePDFToData = async (req, res) => {
           }
         });
         const amount = formatCodedAmount(invoiceAmount.R[0].T);
-        // deleteAllFiles();
+        deleteAllFiles();
         return res.json({ qrData: qrResult[0].data, amount });
       });
 
       pdfParser.loadPDF(pathToPDF);
 
-      // deleteAllFiles();
+      deleteAllFiles();
       return;
     });
   } catch (e) {
-    // deleteAllFiles();
+    deleteAllFiles();
     return res.sendStatus(204);
   }
 };
@@ -75,12 +75,13 @@ const qrcodePDFToData = async (req, res) => {
 
       const qrResult = !!imgData ? zbarScan(imgData) : 'Error';
 
-      // deleteAllFiles();
+      deleteAllFiles();
       return res.json({ qrData: qrResult[0].data });
     });
   } catch (e) {
-    // deleteAllFiles();
-    return res.sendStatus(204);
+    deleteAllFiles();
+    // console.log('qrcodePDFToData: ', e);
+    return res.sendStatus(500);
   }
 };
 
@@ -96,7 +97,7 @@ const barcodePDFToData = async (req, res) => {
     fs.unlink(filenameTmp, async (e) => {
       if (e) return;
 
-      await convertPDFtoPNG(originalname);
+      await convertPDFtoPNG(originalname, 500);
 
       const config1 = { width: 500, height: 1000, top: 1500 };
 
@@ -121,12 +122,12 @@ const barcodePDFToData = async (req, res) => {
               const barcodeResult = result?.codeResult?.code;
               if (barcodeResult) {
                 // console.log('BARCODE DETECTED!: ', barcodeResult);
-                // deleteAllFiles();
+                deleteAllFiles();
                 return res.send({ barcode: barcodeResult });
               } else {
                 // console.log('BARCODE NOT DETECTED');
-                // deleteAllFiles();
-                return res.sendStatus(204);
+                deleteAllFiles();
+                return res.sendStatus(500);
               }
             }
           );
@@ -134,8 +135,8 @@ const barcodePDFToData = async (req, res) => {
       );
     });
   } catch (e) {
-    // deleteAllFiles();
-    return res.sendStatus(204);
+    deleteAllFiles();
+    return res.sendStatus(500);
   }
 };
 
